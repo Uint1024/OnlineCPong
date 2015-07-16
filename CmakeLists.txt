@@ -30,6 +30,13 @@ INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS}
 include_directories(include)
 include_directories(C:/SDL2-2.0.3/include/SDL2)
 add_executable(onlinegame src/main.c
+        src/renderer.c
+        src/entity.c
+        src/vector.c
+        src/world.c
+        src/input.c
+        src/server.c
+        src/client.c
   )
 
 
