@@ -39,6 +39,8 @@ int InitSDL(){
         SDL_Quit();
         return -1;
     }
+
+    return 0;
 }
 
 int Init_Everything(int argc, char** argv){
@@ -52,12 +54,9 @@ int Init_Everything(int argc, char** argv){
 
     World_Init();
 
-    /*if(Net_Init() == -1){
-        return -1;
-    }*/
-
     // If the program is run as server
-    if(strcmp(argv[1], "--server") == 0){
+    if(strcmp(argv[1], "--server") == 0 ||
+            strcmp(argv[1], "-s") == 0){
         if(Server_Init(argc, argv) == -1){
             fprintf(stderr, "InitServer error.");
             return -1;
@@ -65,26 +64,24 @@ int Init_Everything(int argc, char** argv){
     }
 
     // If the program is run as client
-    if(strcmp(argv[1], "--client") == 0){
+    if(strcmp(argv[1], "--client") == 0 ||
+            strcmp(argv[1], "-c") == 0){
         if(Client_Init(argc, argv) == -1){
             fprintf(stderr, "InitClient error.");
             return -1;
         }
     }
+    return 0;
 }
 
-static int err = 0;
 int main(int argc, char** argv)
 {
-    //NetConfig_Constructor(&net_config);
-
     if(argc < 3){
         printf("Usage: \nname.exe --client ip connect_port listen_port"
                 "\nor"
                 "\nname.exe --server listen_port");
-        return 1;
+        return -1;
     }
-
 
     if(Init_Everything(argc, argv) == -1){
         return -1;
@@ -92,7 +89,6 @@ int main(int argc, char** argv)
 
     int keep_going = 1;
     while(keep_going){
-
         // is server
         if(World_GetPlayerId() == 0){
             Server_Run();
@@ -100,6 +96,7 @@ int main(int argc, char** argv)
             Client_Run();
         }
 
+        // Returns -1 when pressing Escape
         keep_going = Input_PollEvents();
         World_Update();
         Renderer_Render();
@@ -108,4 +105,6 @@ int main(int argc, char** argv)
     // Bye!
     Renderer_Destroy();
 
+    // Calm down, compiler!
+    return 0;
 }

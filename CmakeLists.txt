@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.3)
 
 project("onlinegame")
 
-add_definitions(-std=c11 -g)
+add_definitions(-std=c11 -g -Wextra -Wall -Wshadow 
+        -Wformat=2 -O1)
 
 find_package(OpenGL REQUIRED)
 
